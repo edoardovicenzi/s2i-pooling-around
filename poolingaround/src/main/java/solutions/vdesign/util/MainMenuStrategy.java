@@ -8,7 +8,71 @@ public class MainMenuStrategy implements IStrategy {
 
     @Override
     public void execute() {
+        StrategyContext context = new StrategyContext(new MainMenuStrategy());
 
+        do {
+            // always return to the main menu
+            printMainMenu();
+
+            //get user input
+            String userInput = ConsoleUtil.getInputString("Cosa vuoi fare: ", "\\d{1}");
+            int userChoice = Integer.parseInt(userInput);
+            System.out.println();
+
+            // Parse user action. No action recognize = refresh main menu
+            // Quit option, parse immediately
+            if (userChoice == 0) {
+                break;
+            }
+
+            switch (userChoice) {
+                case 1:
+                    // View all trips
+                    context.setStrategy(new ViewTripsStrategy());
+                    break;
+                case 2:
+                    // Book existing trip
+                    context.setStrategy(new BookingTripStrategy());
+                    break;
+                case 3:
+                    // Cancel reservation
+                    context.setStrategy(new CancelReservationStrategy());
+                    break;
+                case 4:
+                    // Add User
+                    context.setStrategy(new AddUserStrategy());
+                    break;
+                case 5:
+                    // Export available trips
+                    context.setStrategy(new ExportStrategy());
+                    break;
+                case 6:
+                    //Admin only option
+                    if (UserEntity.getInstance().getIsAdmin()){
+                        context.setStrategy(new ViewAllReservationsStrategy());
+                    }
+                    //Default to ask admin credentials
+                    else {
+                        context.setStrategy(new AdminLoginStrategy());
+                    }
+                    break;
+                case 7:
+                    //Admin only option
+                    if (UserEntity.getInstance().getIsAdmin()){
+                        context.setStrategy(new ViewAllUsersStrategy());
+                    }
+                    break;
+            
+                default:
+                    context.setStrategy(new MainMenuStrategy());
+                    break;
+            }
+
+            // exectute the strategy
+            context.execute();
+        } while (true);
+    }
+    private void printMainMenu (){
         ConsoleTable.printBanner("Menu Principale");
 
         StringBuilder mainMenu = new StringBuilder("\n");
@@ -60,8 +124,8 @@ public class MainMenuStrategy implements IStrategy {
 
         mainMenu.append("\n");
         mainMenu.append("\n");
-        mainMenu.append("Cosa vuoi fare? ");
 
         System.out.print(mainMenu.toString());
     }
+
 }
