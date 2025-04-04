@@ -1,17 +1,25 @@
-# Welcome to MkDocs
+# Welcome to Pooling Around Console
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+!!! warning
 
-## Commands
+    Even though the product is localized in italian this documentation has been written in english.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
 
-## Project layout
+## Features
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Pooling Around is an app that lets you book a trip with other people so you save money and make friends!
+
+- See all trips
+- Book a trip
+- Cancel a reservetion
+- Add a user
+- Export all available trips in .csv
+- Admin controls (for advanced users only!)
+    - for the demo use "adminadmin" as password
+    - See all the users
+    - See all the reservations
+
+## Get started 
+
+[Click here](./installation.md) and follow this steps to start and build the app.
+

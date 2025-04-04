@@ -1,12 +1,14 @@
 # Get Started
 
 ## Requirements
+You can build this project with java OR use docker (recommended)
 
 - git
-- Java 21 SDK
-- One of:
-    - Docker
-    - Apche Maven 3.9.9 with java 21 compatibility
+- Choose one:
+    - Docker (recommended)
+    - Native:
+        - Java 21 SDK
+        - Apche Maven 3.9.9 with java 21 compatibility
 
 ## Clone the repo
 
@@ -15,37 +17,62 @@ First of all clone the repositry:
 ```sh
 git clone https://github.com/edoardovicenzi/s2i-pooling-around.git
 ```
-Next cd into the app directory
 
+Next cd into the app directory:
 
 ```sh
 cd s2i-pooling-around/
 ```
 
-## Maven considerations
+## Build .jar
 
 There are 3 ways to build this app into a jar file.
 
-This app uses heavly and exensively the maven wrapper (mvnw) so it is the reccomended way.
+### Docker (recommended)
 
-### Thorugh Maven wrapper
+- Go to the github project directory and navigate to:
+    ```sh
+    cd poolingaround/
+    ```
+- Build the project into a .jar file like so:
 
-This is the reccomended way.
+=== "Windows"
 
-Install the wrapper
+    ```sh
+    docker run -it --rm --name poolingaround -v "%cd%":/usr/src/mymaven -w /usr/src/mymaven maven:3-eclipse-temurin-21 mvn clean package
+    ```
+=== "Unix, Powershell"
 
-- With docker
-```sh
-docker run --rm -v "$(pwd):/app" -w /app maven:3-eclipse-temurin-21 mvn wrapper:wrapper
-```
+    ```sh
+    docker run -it --rm --name poolingaround -v "$(PWD)":/usr/src/mymaven -w /usr/src/mymaven maven:3-eclipse-temurin-21 mvn clean package
+    ```
+- The .jar file will be in placed in `target/` directory on the same level
 
-- With maven CLI
-```sh
-mvn wrapper:wrapper
-```
+### Use the scripts
 
-<!-- TODO: DOCS: Finish mvnw installation guide  -->
-### Through maven cli
+!!! warning
+
+    All the scripts require docker to run!
+
+Go to the github project directory and navigate to:
+    ```sh
+    cd poolingaround/
+    ```
+=== "Windows"
+
+    Run the `build.bat` batch file:
+    ```bat
+    build
+    ```
+=== "Unix, Powershell"
+
+    Run the `build.bash` shell file:
+    ```sh
+    build
+    ```
+The .jar file will be in placed in `target/` directory on the same level.
+
+### Maven CLI
 
 This is the most straight forward approach.
 
@@ -58,8 +85,49 @@ This is the most straight forward approach.
     ```sh
     mvn clean package
     ```
-- The .jar file will be in placed in `target` directory on the same level
-- execute the app with java
+- The .jar file will be in placed in `target/` directory on the same level
+
+## Run the project
+To run the .jar there are currently 3 supported ways.
+### Docker (recommended)
+
+- Go to the github project directory and navigate to:
+    ```sh
+    cd poolingaround/
+    ```
+
+- Run the following commands to build and run the project:
+    ```sh
+    docker buildx build -t poolingaround .
+    
+    docker run --rm -it poolingaround
+    ```
+
+### Use the scripts
+
+!!! warning
+
+    All the scripts require docker to run!
+
+Go to the github project directory and navigate to:
+    ```sh
+    cd poolingaround/
+    ```
+=== "Windows"
+
+    Run the `build_and_run.bat` batch file:
+    ```bat
+    build_and_run
+    ```
+=== "Unix, Powershell"
+
+    Run the `build_and_run.bash` shell file:
+    ```sh
+    build_and_run
+    ```
+### Use java on the .jar file
+This step requires you to have Java 21 JDK installed as well as the JAVA_HOME enviromental variable set to point to the right Java version (21)
+Build the .jar first (see above) the run:
     ```sh
     java -cp target/poolingaround-1.0-SNAPSHOT.jar solutions.vdesign.App
     ```
