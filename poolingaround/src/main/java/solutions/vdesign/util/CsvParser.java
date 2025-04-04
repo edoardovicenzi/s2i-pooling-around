@@ -8,7 +8,6 @@ import java.nio.charset.Charset;
 import java.nio.file.*;
 
 public class CsvParser {
-    private static String assetsPathString = "src/main/java/solutions/vdesign/assets";
     private static Charset charset = Charset.forName("UTF-8");
 
     private static enum Tables {
@@ -36,7 +35,7 @@ public class CsvParser {
         return savedReservations;
     }
 
-    private static Path getCSVPath(Tables tableRef) {
+    private static String getFileName(Tables tableRef) {
         String resourceName;
         switch (tableRef) {
             case USER:
@@ -54,21 +53,25 @@ public class CsvParser {
             default:
                 throw new RuntimeException("CSV Table not found.");
         }
-        return Paths.get(assetsPathString, resourceName + ".csv");
+        return resourceName + ".csv";
     }
 
     private static <T> ArrayList<T> populateFromCSV(Tables type, Class<T> clazz) {
 
         ArrayList<T> resultArrayList = new ArrayList<>();
 
-        Path filePath = getCSVPath(type);
+        String fileName = getFileName(type);
 
-        try (BufferedReader inputStream = Files.newBufferedReader(filePath, charset)) {
+        try (
+                InputStream is = CsvParser.class.getClassLoader().getResourceAsStream(fileName);
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+            ) {
             // Skip the first line
-            inputStream.readLine();
+            br.readLine();
 
             String line;
-            while ((line = inputStream.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 String[] fields = line.split(";");
                 if (clazz.equals(User.class)) {
                     User newUser = new User();
